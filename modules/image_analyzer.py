@@ -1,4 +1,3 @@
-import os
 import torch
 from PIL import Image
 from transformers import BlipProcessor, BlipForConditionalGeneration, pipeline, AutoTokenizer
@@ -6,24 +5,15 @@ from optimum.intel.openvino import OVModelForSeq2SeqLM
 import streamlit as st
 
 # Load BLIP image captioning model
-@st.cache_resource(show_spinner="🔍 Loading image caption model...")
 def load_caption_model():
     processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
     model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
     return processor, model
 
 # Load Flan-T5 with OpenVINO
-@st.cache_resource(show_spinner="🧠 Loading explanation model...")
 def load_explainer_model():
-    model_dir = "models/image_explainer"
-    if not os.path.exists(model_dir):
-        tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
-        model = OVModelForSeq2SeqLM.from_pretrained("google/flan-t5-base", export=True)
-        tokenizer.save_pretrained(model_dir)
-        model.save_pretrained(model_dir)
-    else:
-        tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        model = OVModelForSeq2SeqLM.from_pretrained(model_dir)
+    tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
+    model = OVModelForSeq2SeqLM.from_pretrained("google/flan-t5-base", export=True)
     return pipeline("text2text-generation", model=model, tokenizer=tokenizer)
 
 caption_processor, caption_model = load_caption_model()
