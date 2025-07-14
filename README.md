@@ -66,5 +66,18 @@ An all-in-one interactive learning dashboard built using **Python**, **Streamlit
 
 ### ✅ Clone this repository
 ```bash
-git clone https://github.com/your-username/ai-learning-assistant.git
+git clone https://github.com/AmanAdusumilli/ai-powered-learning-assistant.git
 cd ai-learning-assistant
+```
+
+### ✅ Install required packages
+```bash
+pip install -r requirements.txt
+```
+
+### ✅ Run the app
+```bash
+streamlit run app.py
+```
+
+
