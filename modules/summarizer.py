@@ -1,20 +1,10 @@
-import os
 import streamlit as st
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 from optimum.intel.openvino import OVModelForSeq2SeqLM
-from transformers import AutoTokenizer
 
-@st.cache_resource(show_spinner="🧠 Loading summarization model...")
 def load_summarizer():
-    model_dir = "models/summarizer"
-    if not os.path.exists(model_dir):
-        tokenizer = AutoTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
-        model = OVModelForSeq2SeqLM.from_pretrained("sshleifer/distilbart-cnn-12-6", export=True)
-        tokenizer.save_pretrained(model_dir)
-        model.save_pretrained(model_dir)
-    else:
-        tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        model = OVModelForSeq2SeqLM.from_pretrained(model_dir)
+    tokenizer = AutoTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
+    model = OVModelForSeq2SeqLM.from_pretrained("sshleifer/distilbart-cnn-12-6", export=True)
     return pipeline("summarization", model=model, tokenizer=tokenizer)
 
 summarizer = load_summarizer()
