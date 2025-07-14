@@ -157,6 +157,7 @@ with st.expander("📚 Question Bank Generator", expanded=False):
                 st.write(f"{i}. {q}")
 
 # ------------------------ Flashcards ------------------------
+
 with st.expander("🧠 Interactive Flashcards", expanded=False):
     if st.button("Generate Flashcards"):
         if not text.strip():
@@ -169,10 +170,13 @@ with st.expander("🧠 Interactive Flashcards", expanded=False):
                 else:
                     st.success(f"✅ {len(st.session_state.flashcards)} flashcards created.")
 
-    if st.session_state.flashcards:
-        for i, card in enumerate(st.session_state.flashcards, 1):
-            with st.expander(f"🃏 {i}. {card['term']}"):
-                st.markdown(f"**Definition:** {card['definition']}")
+
+if st.session_state.flashcards:
+    st.subheader("📚 Flashcards")
+    for i, card in enumerate(st.session_state.flashcards, 1):
+        with st.expander(f"🃏 {i}. {card['term']}"):
+            st.markdown(f"**Definition:** {card['definition']}")
+
 
 # ------------------------ Image Analyzer ------------------------
 with st.expander("🖼️ Diagram/Image Analyzer", expanded=False):
