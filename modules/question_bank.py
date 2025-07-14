@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 from transformers import pipeline, AutoTokenizer
 from optimum.intel.openvino import OVModelForSeq2SeqLM
@@ -7,17 +6,9 @@ from nltk.tokenize import sent_tokenize
 
 nltk.download('punkt')
 
-@st.cache_resource(show_spinner="📘 Loading Question Generator...")
 def load_qg_model():
-    model_dir = "models/qbank"
-    if not os.path.exists(model_dir):
-        tokenizer = AutoTokenizer.from_pretrained("valhalla/t5-base-qg-hl")
-        model = OVModelForSeq2SeqLM.from_pretrained("valhalla/t5-base-qg-hl", export=True)
-        tokenizer.save_pretrained(model_dir)
-        model.save_pretrained(model_dir)
-    else:
-        tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        model = OVModelForSeq2SeqLM.from_pretrained(model_dir)
+    tokenizer = AutoTokenizer.from_pretrained("valhalla/t5-base-qg-hl")
+    model = OVModelForSeq2SeqLM.from_pretrained("valhalla/t5-base-qg-hl", export=True)
     return pipeline("text2text-generation", model=model, tokenizer=tokenizer)
 
 qg_pipeline = load_qg_model()
