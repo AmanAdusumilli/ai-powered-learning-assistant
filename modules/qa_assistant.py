@@ -1,22 +1,12 @@
 import streamlit as st
-import os
 from optimum.intel.openvino import OVModelForQuestionAnswering
 from transformers import AutoTokenizer, pipeline
 from sentence_transformers import SentenceTransformer, util
 import torch
 
-@st.cache_resource(show_spinner="🔍 Loading QA model and sentence embeddings...")
 def load_models():
-    model_dir = "models/qa"
-    if not os.path.exists(model_dir):
-        tokenizer = AutoTokenizer.from_pretrained("deepset/roberta-base-squad2")
-        model = OVModelForQuestionAnswering.from_pretrained("deepset/roberta-base-squad2", export=True)
-        tokenizer.save_pretrained(model_dir)
-        model.save_pretrained(model_dir)
-    else:
-        tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        model = OVModelForQuestionAnswering.from_pretrained(model_dir)
-
+    tokenizer = AutoTokenizer.from_pretrained("deepset/roberta-base-squad2")
+    model = OVModelForQuestionAnswering.from_pretrained("deepset/roberta-base-squad2", export=True)
     embedder = SentenceTransformer('all-MiniLM-L6-v2')
     qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
     return embedder, qa_pipeline
